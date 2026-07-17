@@ -24,13 +24,19 @@ export default function HeroVideo() {
       if (!document.hidden) startPlayback();
     };
 
-    startPlayback();
+    // 첫 화면 로딩과 경쟁하지 않도록 페이지 로드가 끝난 뒤에 시작한다.
+    // preload="none" + autoPlay 미사용이므로 play() 시점에 비로소 다운로드가 시작된다
+    // (초기 로드 시 영상 트래픽 0 — 포스터만 표시됨).
+    if (document.readyState === "complete") startPlayback();
+    else window.addEventListener("load", startPlayback, { once: true });
+
     video.addEventListener("loadeddata", startPlayback);
     video.addEventListener("canplay", startPlayback);
     document.addEventListener("visibilitychange", resumeWhenVisible);
     window.addEventListener("pageshow", startPlayback);
 
     return () => {
+      window.removeEventListener("load", startPlayback);
       video.removeEventListener("loadeddata", startPlayback);
       video.removeEventListener("canplay", startPlayback);
       document.removeEventListener("visibilitychange", resumeWhenVisible);
@@ -58,11 +64,10 @@ export default function HeroVideo() {
         <video
           ref={videoRef}
           className="hero-video"
-          autoPlay
           muted
           loop
           playsInline
-          preload="auto"
+          preload="none"
           poster="/assets/hero-film-v2-poster.jpg"
           tabIndex={-1}
           disablePictureInPicture
@@ -73,7 +78,6 @@ export default function HeroVideo() {
         >
           <source media="(max-width: 700px)" src="/assets/hero-film-v2-mobile.mp4" type="video/mp4" />
           <source src="/assets/hero-film-v2.mp4" type="video/mp4" />
-          <source src="/assets/hero-film-v2.webm" type="video/webm" />
         </video>
       </div>
       <button
