@@ -19,7 +19,7 @@ export default function Home() {
           <div className="hero-copy-inner">
             <p className="hero-kicker">CREATIVE TECHNOLOGY STUDIO</p>
             <h1 id="hero-title">기술은 깊고,<br />상상은 담백하게.<em>雲</em></h1>
-            <p className="hero-description">운월담 스튜디오는 AI와 크리에이티브가 만나<br />브랜드의 본질을 시각적으로 빚어내는 디지털 제작 스튜디오입니다.</p>
+            <p className="hero-description">운월담 스튜디오는 AI와 크리에이티브가 만나 <br />브랜드의 본질을 시각적으로 빚어내는 디지털 제작 스튜디오입니다.</p>
             <div className="hero-buttons"><a className="brush-button" href="/contact#inquiry-form">프로젝트 문의하기 <span>⟶</span></a><a className="line-button" href="/portfolio">포트폴리오 보기 <span>⟶</span></a></div>
           </div>
         </div>
