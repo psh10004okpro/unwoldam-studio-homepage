@@ -2,29 +2,38 @@
 
 import { FormEvent, useState } from "react";
 
+const CONTACT_EMAIL = "unwoldamstudio@gmail.com";
+
 export default function ContactForm() {
   const [message, setMessage] = useState("");
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const inquiry = [
+    const body = [
       "[운월담 스튜디오 프로젝트 문의]",
+      "",
       `이름/회사: ${data.get("name") ?? ""}`,
       `연락처: ${data.get("contact") ?? ""}`,
       `필요한 제작: ${data.get("service") ?? ""}`,
       `예상 일정: ${data.get("schedule") ?? ""}`,
       `예상 예산: ${data.get("budget") ?? ""}`,
       `참고 링크: ${data.get("reference") ?? ""}`,
-      `문의 내용: ${data.get("details") ?? ""}`,
+      "",
+      "문의 내용:",
+      `${data.get("details") ?? ""}`,
     ].join("\n");
+    const subject = `[프로젝트 문의] ${data.get("name") ?? "홈페이지"} · ${data.get("service") ?? ""}`;
 
+    // 메일 앱이 열리지 않는 환경(웹메일 미연결 등)을 대비해 클립보드에도 복사한다.
     try {
-      await navigator.clipboard.writeText(inquiry);
-      setMessage("문의 내용이 복사되었습니다. 문의 이메일을 연결하면 바로 전송 방식으로 변경됩니다.");
+      await navigator.clipboard.writeText(body);
     } catch {
-      setMessage("복사가 제한되었습니다. 입력 내용을 직접 선택해 복사해 주세요.");
+      /* 클립보드가 제한되면 무시 — 메일 앱 열기는 아래에서 계속 시도 */
     }
+    // 방문자의 메일 앱을 열어 운월담 수신 주소로 전송한다.
+    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setMessage(`메일 앱이 열립니다. 열리지 않으면 복사된 내용을 ${CONTACT_EMAIL} 로 보내 주세요.`);
   }
 
   return (
@@ -52,8 +61,8 @@ export default function ContactForm() {
       <label><span>참고 링크</span><input name="reference" type="url" placeholder="참고 사이트·영상·자료 URL" /></label>
       <label className="full-field"><span>프로젝트 이야기</span><textarea name="details" rows={4} placeholder="목적, 사용처, 필요한 기능이나 결과물을 자유롭게 적어 주세요" required /></label>
       <div className="form-footer full-field">
-        <p>현재 문의 수신 주소 연결 전입니다. 작성한 내용을 안전하게 복사해 드립니다.</p>
-        <button type="submit">문의 내용 복사하기 <span aria-hidden="true">↗</span></button>
+        <p>보내기를 누르면 메일 앱이 열려 <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> 로 문의가 전달됩니다. (내용은 자동으로 복사됩니다)</p>
+        <button type="submit">문의 보내기 <span aria-hidden="true">↗</span></button>
       </div>
       <p className="form-status full-field" aria-live="polite">{message}</p>
     </form>
