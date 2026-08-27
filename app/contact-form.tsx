@@ -3,37 +3,72 @@
 import { FormEvent, useState } from "react";
 
 const CONTACT_EMAIL = "unwoldamstudio@gmail.com";
+// FormSubmit.co: 서버 없이 폼 내용을 위 이메일로 직접 발송한다(키/가입 불필요).
+// 최초 1회 수신 이메일에서 활성화 링크를 클릭해야 이후 문의가 전달된다.
+const FORM_ENDPOINT = `https://formsubmit.co/ajax/${CONTACT_EMAIL}`;
 
 export default function ContactForm() {
-  const [message, setMessage] = useState("");
+  const [status, setStatus] = useState("");
+  const [sending, setSending] = useState(false);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const body = [
-      "[운월담 스튜디오 프로젝트 문의]",
-      "",
-      `이름/회사: ${data.get("name") ?? ""}`,
-      `연락처: ${data.get("contact") ?? ""}`,
-      `필요한 제작: ${data.get("service") ?? ""}`,
-      `예상 일정: ${data.get("schedule") ?? ""}`,
-      `예상 예산: ${data.get("budget") ?? ""}`,
-      `참고 링크: ${data.get("reference") ?? ""}`,
-      "",
-      "문의 내용:",
-      `${data.get("details") ?? ""}`,
-    ].join("\n");
-    const subject = `[프로젝트 문의] ${data.get("name") ?? "홈페이지"} · ${data.get("service") ?? ""}`;
+    const form = event.currentTarget;
+    const data = new FormData(form);
 
-    // 메일 앱이 열리지 않는 환경(웹메일 미연결 등)을 대비해 클립보드에도 복사한다.
+    const fields = {
+      "이름/회사": String(data.get("name") ?? ""),
+      "연락처": String(data.get("contact") ?? ""),
+      "필요한 제작": String(data.get("service") ?? ""),
+      "예상 일정": String(data.get("schedule") ?? ""),
+      "예상 예산": String(data.get("budget") ?? ""),
+      "참고 링크": String(data.get("reference") ?? ""),
+      "문의 내용": String(data.get("details") ?? ""),
+    };
+
+    setSending(true);
+    setStatus("문의를 보내는 중입니다...");
+
     try {
-      await navigator.clipboard.writeText(body);
+      const res = await fetch(FORM_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          _subject: `[프로젝트 문의] ${fields["이름/회사"] || "홈페이지"} · ${fields["필요한 제작"]}`,
+          _template: "table",
+          _captcha: "false",
+          ...fields,
+        }),
+      });
+      const result = await res.json().catch(() => ({}));
+      if (res.ok && (result.success === "true" || result.success === true)) {
+        form.reset();
+        setStatus("문의가 접수되었습니다. 담당자가 빠르게 연락드리겠습니다. 감사합니다!");
+      } else {
+        setStatus(
+          typeof result.message === "string"
+            ? result.message
+            : `잠시 문제가 있었습니다. 번거로우시겠지만 ${CONTACT_EMAIL} 로 보내 주세요.`,
+        );
+      }
     } catch {
-      /* 클립보드가 제한되면 무시 — 메일 앱 열기는 아래에서 계속 시도 */
+      // 네트워크 차단 등 예외 시 폴백: 메일 앱 열기 + 클립보드 복사
+      const body = [
+        "[운월담 스튜디오 프로젝트 문의]",
+        "",
+        ...Object.entries(fields).map(([k, v]) => `${k}: ${v}`),
+      ].join("\n");
+      try {
+        await navigator.clipboard.writeText(body);
+      } catch {
+        /* 클립보드 제한 시 무시 */
+      }
+      const subject = `[프로젝트 문의] ${fields["이름/회사"] || "홈페이지"} · ${fields["필요한 제작"]}`;
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      setStatus(`전송이 막혀 메일 앱을 열었습니다. 열리지 않으면 복사된 내용을 ${CONTACT_EMAIL} 로 보내 주세요.`);
+    } finally {
+      setSending(false);
     }
-    // 방문자의 메일 앱을 열어 운월담 수신 주소로 전송한다.
-    window.location.href = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    setMessage(`메일 앱이 열립니다. 열리지 않으면 복사된 내용을 ${CONTACT_EMAIL} 로 보내 주세요.`);
   }
 
   return (
@@ -61,10 +96,10 @@ export default function ContactForm() {
       <label><span>참고 링크</span><input name="reference" type="url" placeholder="참고 사이트·영상·자료 URL" /></label>
       <label className="full-field"><span>프로젝트 이야기</span><textarea name="details" rows={4} placeholder="목적, 사용처, 필요한 기능이나 결과물을 자유롭게 적어 주세요" required /></label>
       <div className="form-footer full-field">
-        <p>보내기를 누르면 메일 앱이 열려 <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> 로 문의가 전달됩니다. (내용은 자동으로 복사됩니다)</p>
-        <button type="submit">문의 보내기 <span aria-hidden="true">↗</span></button>
+        <p>보내기를 누르면 <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> 로 문의가 바로 접수됩니다.</p>
+        <button type="submit" disabled={sending}>{sending ? "보내는 중…" : "문의 보내기"} <span aria-hidden="true">↗</span></button>
       </div>
-      <p className="form-status full-field" aria-live="polite">{message}</p>
+      <p className="form-status full-field" aria-live="polite">{status}</p>
     </form>
   );
 }
