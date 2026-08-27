@@ -6,7 +6,7 @@
 
 - 운월담 스튜디오 **공식 홈페이지**(마케팅 사이트). **완전 정적** — API 라우트·서버액션·DB 없음.
 - 페이지: `/` `/about` `/services` `/portfolio` `/process` `/contact` (+404). 문구·콘텐츠 대부분은 `app/site-data.ts`.
-- 문의 폼(`app/contact-form.tsx`)은 **클라이언트 전용**이다 — 서버로 전송하지 않고 클립보드에 복사한다.
+- 문의 폼(`app/contact-form.tsx`)은 **클라이언트 전용**이다 — 서버 없이 방문자 메일 앱을 열어 `unwoldamstudio@gmail.com`으로 전송(`mailto:`)하고, 열리지 않는 환경 대비 클립보드에도 복사한다. (정적 사이트라 서버 수신함은 없음. 인라인 제출/실시간 인박스가 필요하면 Web3Forms·Formspree 같은 클라이언트 폼서비스로 교체 — 서버 없이 가능.)
 - 원본은 **vinext 스타터**(Cloudflare Worker용 Next.js) + OpenAI Sites 템플릿(`.openai/hosting.json`). **D1/R2는 사용하지 않는다**(둘 다 `null`). `db/`·`worker/`·`examples/`는 템플릿 잔재로, 사이트 어디에서도 import하지 않는다.
 
 ## 배포
