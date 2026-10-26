@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { FormEvent, useState } from "react";
 
 const CONTACT_EMAIL = "unwoldamstudio@gmail.com";
@@ -96,7 +97,7 @@ export default function ContactForm() {
       <label><span>참고 링크</span><input name="reference" type="url" placeholder="참고 사이트·영상·자료 URL" /></label>
       <label className="full-field"><span>프로젝트 이야기</span><textarea name="details" rows={4} placeholder="목적, 사용처, 필요한 기능이나 결과물을 자유롭게 적어 주세요" required /></label>
       <div className="form-footer full-field">
-        <p>보내기를 누르면 <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> 로 문의가 바로 접수됩니다.</p>
+        <p>보내기를 누르면 <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a> 로 문의가 바로 접수됩니다. 입력한 정보의 처리는 <Link href="/privacy">개인정보처리방침</Link>을 따릅니다.</p>
         <button type="submit" disabled={sending}>{sending ? "보내는 중…" : "문의 보내기"} <span aria-hidden="true">↗</span></button>
       </div>
       <p className="form-status full-field" aria-live="polite">{status}</p>

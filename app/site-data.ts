@@ -1,3 +1,11 @@
+export const studio = {
+  nameKo: "운월담 스튜디오",
+  nameEn: "UNWOLDAM STUDIO",
+  businessNumber: "503-37-07624",
+  email: "unwoldamstudio@gmail.com",
+  url: "https://unwoldamstudio.com",
+};
+
 export const services = [
   { icon: "AI_FILM", ko: "AI 영상 제작", text: "브랜드 필름, 광고, 쇼츠와 시네마틱 타이틀을 기획하고 제작합니다.", scope: "기획 · AI 영상 · 모션 · 편집", items: ["브랜드 필름·광고", "숏폼·오프닝·타이틀", "스토리보드·모션·편집"] },
   { icon: "AI_IMAGE", ko: "AI 이미지 제작", text: "캠페인 키비주얼, 제품 이미지와 브랜드 비주얼을 제작합니다.", scope: "아트 디렉션 · 생성 · 리터칭", items: ["캠페인 키비주얼", "제품·공간·캐릭터 이미지", "이미지 생성·리터칭·확장"] },

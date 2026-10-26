@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef, useState } from "react";
 
-export type NavKey = "home" | "about" | "services" | "portfolio" | "process" | "contact";
+export type NavKey = "home" | "about" | "services" | "portfolio" | "process" | "contact" | "privacy" | "terms";
 
 const navLinks: { id: NavKey; href: string; label: string }[] = [
   { id: "home", href: "/", label: "홈" },
