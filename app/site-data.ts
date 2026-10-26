@@ -1,7 +1,9 @@
 export const studio = {
   nameKo: "운월담 스튜디오",
   nameEn: "UNWOLDAM STUDIO",
+  businessType: "1인 사업자",
   businessNumber: "503-37-07624",
+  representative: "김나영",
   email: "unwoldamstudio@gmail.com",
   url: "https://unwoldamstudio.com",
 };

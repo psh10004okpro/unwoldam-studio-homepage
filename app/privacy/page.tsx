@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import LegalLayout, { CompanyFacts, LEGAL_EFFECTIVE_DATE, LegalPlaceholder } from "../legal-layout";
+import LegalLayout, { CompanyFacts, LEGAL_EFFECTIVE_DATE } from "../legal-layout";
 import { studio } from "../site-data";
 
 export const metadata: Metadata = {
@@ -21,12 +21,8 @@ export default function PrivacyPage() {
         <span>시행일 {LEGAL_EFFECTIVE_DATE}</span>
         <Link href="/terms">이용약관</Link>
       </p>
-      <p className="legal-notice">
-        대괄호로 표시된 항목은 이 홈페이지에 공개된 사실이 없어 비워 둔 자리입니다. 대표자 성명, 사업장 주소, 전화번호, 개인정보 보호책임자의 성명과 직책은 확인되는 대로 채워야 합니다. 아래 본문은 그 빈칸을 추측해 채우지 않았습니다.
-      </p>
-
       <p>
-        {studio.nameKo}(사업자등록번호 {studio.businessNumber}, 이하 “회사”)는 「개인정보 보호법」에 따라 정보주체의 개인정보를 보호하고 관련 고충을 처리하기 위해 이 개인정보처리방침을 둡니다.
+        {studio.nameKo}({studio.businessType}, 사업자등록번호 {studio.businessNumber}, 대표자 {studio.representative}, 이하 “회사”)는 「개인정보 보호법」에 따라 정보주체의 개인정보를 보호하고 관련 고충을 처리하기 위해 이 개인정보처리방침을 둡니다.
       </p>
       <CompanyFacts />
 
@@ -144,14 +140,8 @@ export default function PrivacyPage() {
         </table>
       </div>
       <p>
-        거래·계정 이메일과 광고성 이메일의 발송 위탁은 서울 리전의 SES에서 이루어지며, 회사는 이 발송을 국외 이전으로 두지 않습니다. 홈페이지 문의는 FormSubmit을 거칩니다. 이 서비스의 서버 소재지는 공개된 자료에서 확인하지 못했고, 문의 내용이 대한민국 밖에서 처리될 수 있습니다.
+        거래·계정 이메일과 광고성 이메일의 발송은 서울 리전의 SES에 위탁합니다. 홈페이지 문의는 FormSubmit(formsubmit.co)이 받아 회사 이메일로 전달합니다. 전달되는 항목은 문의 폼에 입력한 내용이고, 이용자가 폼을 보내는 시점의 HTTPS 요청으로 전달됩니다. 회사가 그 정보를 보유하는 기간은 제4조의 홈페이지 문의 기간이며, 정보주체는 삭제를 요청할 수 있습니다.
       </p>
-      <ul>
-        <li>이전받는 자: FormSubmit (formsubmit.co). 법인 소재지 <LegalPlaceholder>[수탁자 소재지 — 확인 후 기재]</LegalPlaceholder></li>
-        <li>이전 항목: 문의 폼에 입력한 이름·회사명, 연락처, 선택 입력 항목</li>
-        <li>이전 목적과 방법: 이용자가 문의 폼을 보내는 시점에, HTTPS로 수탁자 서버를 거쳐 회사 이메일로 전달</li>
-        <li>보유·이용 기간: 제4조의 홈페이지 문의 보유 기간. 정보주체는 삭제를 요청할 수 있습니다.</li>
-      </ul>
 
       <h2>7. 정보주체의 권리와 삭제 요청</h2>
       <p>
@@ -173,7 +163,6 @@ export default function PrivacyPage() {
         <li>이메일 발송은 서울 리전의 SES에 위탁하고, 위탁 목적 밖 이용이 없도록 관리합니다.</li>
         <li>삭제 요청과 보유 기간이 실제로 지켜지는지 확인합니다.</li>
       </ul>
-      <p>인증 제도의 취득 여부는 이 홈페이지에 공개되어 있지 않아 적지 않습니다.</p>
 
       <h2>10. 광고성 이메일</h2>
       <ul>
@@ -192,10 +181,10 @@ export default function PrivacyPage() {
       </p>
 
       <h2>12. 개인정보 보호책임자</h2>
-      <p>개인정보 보호와 관련한 문의, 열람·삭제 요청, 불만과 피해 구제는 아래로 연락할 수 있습니다. 책임자의 성명과 직책은 아직 이 사이트에 없어 빈칸으로 두었고, 연락은 회사 이메일로 받습니다.</p>
+      <p>개인정보 보호와 관련한 문의, 열람·삭제 요청, 불만과 피해 구제는 아래로 연락할 수 있습니다.</p>
       <dl className="legal-facts">
-        <div><dt>성명</dt><dd><LegalPlaceholder>[개인정보 보호책임자 성명 — 확인 후 기재]</LegalPlaceholder></dd></div>
-        <div><dt>직책</dt><dd><LegalPlaceholder>[직책 — 확인 후 기재]</LegalPlaceholder></dd></div>
+        <div><dt>성명</dt><dd>{studio.representative}</dd></div>
+        <div><dt>직책</dt><dd>대표</dd></div>
         <div><dt>연락처</dt><dd><a href={`mailto:${studio.email}`}>{studio.email}</a></dd></div>
       </dl>
 

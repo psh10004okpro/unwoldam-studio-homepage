@@ -6,18 +6,13 @@ import SubpageHero from "./subpage-hero";
 
 export const LEGAL_EFFECTIVE_DATE = "2026년 10월 26일";
 
-export function LegalPlaceholder({ children }: { children: ReactNode }) {
-  return <span className="legal-placeholder">{children}</span>;
-}
-
 export function CompanyFacts() {
   return (
     <dl className="legal-facts">
       <div><dt>상호</dt><dd>{studio.nameKo} ({studio.nameEn})</dd></div>
+      <div><dt>사업자 구분</dt><dd>{studio.businessType}</dd></div>
       <div><dt>사업자등록번호</dt><dd>{studio.businessNumber}</dd></div>
-      <div><dt>대표자</dt><dd><LegalPlaceholder>[대표자 성명 — 확인 후 기재]</LegalPlaceholder></dd></div>
-      <div><dt>주소</dt><dd><LegalPlaceholder>[사업장 주소 — 확인 후 기재]</LegalPlaceholder></dd></div>
-      <div><dt>전화번호</dt><dd><LegalPlaceholder>[전화번호 — 확인 후 기재]</LegalPlaceholder></dd></div>
+      <div><dt>대표자</dt><dd>{studio.representative}</dd></div>
       <div><dt>이메일</dt><dd><a href={`mailto:${studio.email}`}>{studio.email}</a></dd></div>
       <div><dt>웹사이트</dt><dd><a href={studio.url}>{studio.url}</a></dd></div>
     </dl>
